@@ -1,0 +1,16 @@
+{
+  "name": "@anishshobith/tailwind",
+  "packageManager": "yarn@3.6.1",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "files": [
+    "dist/*"
+  ],
+  "scripts": {
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.3.3",
+    "tailwindcss-animate": "^1.0.6"
+  }
+}

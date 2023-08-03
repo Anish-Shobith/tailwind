@@ -1,0 +1,81 @@
+name: Build and Publish
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout Project
+        uses: actions/checkout@v3
+
+      - name: Use Node.js 18
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      
+      - name: Restore CI Cache
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
+
+      - name: Install Dependencies
+        run: yarn install --frozen-lockfile
+      
+      - name: Build
+        run: yarn build
+
+      - name: Publish to Build Branch
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          echo "Publishing to build branch..."
+          set -e # Exit with nonzero exit code if anything fails
+
+          # Set up variables
+          GITHUB_ACTOR=$(echo ${GITHUB_ACTOR} | sed 's/[][\.*^$(){}?+|/]/\\&/g')
+          REPONAME=$(echo ${GITHUB_REPOSITORY} | cut -d'/' -f2)
+          USERNAME=$(echo ${GITHUB_REPOSITORY} | cut -d'/' -f1)
+          EMAIL="anish.shobith19@gmail.com"
+          SHA=$(git rev-parse --short HEAD)
+          BRANCH=${GITHUB_REF##*/}
+          TARGET_BRANCH="build"
+          REPO="https://${USERNAME}:${GITHUB_TOKEN}@github.com/${REPONAME}.git"
+
+          # Clone the existing "build" branch for this repo into build/
+          # Create a new empty branch if gh-pages doesn't exist yet (should only happen on first deploy)
+          git clone $REPO build
+          cd build
+          git checkout $TARGET_BRANCH || git checkout --orphan $TARGET_BRANCH
+          cd ..
+
+          # Clean out existing contents
+          rm -rf build/**/* || exit 0
+
+
+          # Run our compile script
+          yarn build
+
+          # Now let's go have some fun with the cloned repo
+          cd build
+          git config user.name "${GITHUB_ACTOR}"
+          git config user.email "${EMAIL}"
+
+          # If there are no changes to the compiled build (e.g. this is a README update) then just bail.
+          if [ -z "$(git status --porcelain)" ]; then
+            echo "No changes to the output on this push; exiting."
+            exit 0
+          fi
+
+          # Commit the "changes", i.e. the new version.
+          # The delta will show diffs between new and old versions.
+          git add .
+          git commit -m "Deploy to Build: ${SHA}"
+
+          # Now that we're all set up, we can push.
+          git push $REPO $TARGET_BRANCH
+
