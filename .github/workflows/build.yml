@@ -72,6 +72,7 @@ jobs:
 
           echo -e "\n# Move the generated docs to the newly-checked-out repo, to be committed and pushed"
           rsync -vaI package.json out/
+          rsync -vaI yarn.lock out/
           rsync -vaI README.md out/
           rsync -vaI LICENSE out/
           rsync -vaI dist/ out/dist/
