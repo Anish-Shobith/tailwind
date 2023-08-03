@@ -64,20 +64,20 @@ jobs:
 
           echo -e "\n# Checkout the repository on the target branch"
           TARGET_BRANCH="build"
-          git clone $REPO data -b $TARGET_BRANCH
+          git clone $REPO out -b $TARGET_BRANCH
 
 
           echo -e "\n# Remove any old files in the dist folder"
-          rm -rfv data/dist/*
+          rm -rfv out/dist/*
 
           echo -e "\n# Move the generated docs to the newly-checked-out repo, to be committed and pushed"
-          rsync -vaI package.json data/
-          rsync -vaI README.md data/
-          rsync -vaI LICENSE data/
-          rsync -vaI dist/ data/dist
+          rsync -vaI package.json out/
+          rsync -vaI README.md out/
+          rsync -vaI LICENSE out/
+          rsync -vaI dist/ out/dist
 
           echo -e "\n# Commit and push"
-          cd data
+          cd out
           git add --all .
           git config user.name "${GITHUB_ACTOR}"
           git config user.email "${GITHUB_EMAIL}"
