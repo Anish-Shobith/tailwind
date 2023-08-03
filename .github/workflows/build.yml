@@ -88,6 +88,9 @@ jobs:
           git config user.email "${GITHUB_EMAIL}"
           git commit -m "build: tsc build for ${GITHUB_SHA}" || true
           git push origin $TARGET_BRANCH
+        
+        env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Publish to Github Registry
         uses: JS-DevTools/npm-publish@v2
@@ -95,5 +98,4 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           registry: "https://npm.pkg.github.com"
 
-        env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
