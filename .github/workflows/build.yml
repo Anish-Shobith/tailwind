@@ -17,6 +17,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18
+          registry-url: https://registry.yarnpkg.com/
       
       - name: Expose yarn config as "$GITHUB_OUTPUT"
         id: yarn-config
@@ -74,6 +75,10 @@ jobs:
           rsync -vaI README.md out/
           rsync -vaI LICENSE out/
           rsync -vaI dist/ out/dist/
+
+          echo -e "\n# Publish package to Github Package Registry"
+          cd out
+          yarn publish --access public --non-interactive --no-git-tag-version --new-version $GITHUB_SHA --registry https://npm.pkg.github.com
 
           echo -e "\n# Commit and push"
           cd out
