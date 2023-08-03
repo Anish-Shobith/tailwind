@@ -75,6 +75,17 @@ jobs:
             cd ..
           fi
 
+          echo -e "\n# Pull changes from the remote build branch"
+          cd out
+          git pull origin $TARGET_BRANCH
+          cd ..
+
+          echo -e "\n# Check if there are changes to be published"
+          if [[ -z $(git diff --name-only) ]]; then
+            echo "No changes to the output on this push; exiting."
+            exit 0
+          fi
+
           echo -e "\n# Remove any old files in the dist folder"
           rm -rfv out/dist/*
 
