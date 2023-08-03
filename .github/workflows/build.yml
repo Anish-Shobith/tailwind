@@ -25,7 +25,7 @@ jobs:
           key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
 
       - name: Install Dependencies
-        run: yarn install --frozen-lockfile
+        run: yarn install --immutable-cache
       
       - name: Build
         run: yarn build
@@ -37,45 +37,40 @@ jobs:
           set -e # Exit with nonzero exit code if anything fails
 
           # Set up variables
-          GITHUB_ACTOR=$(echo ${GITHUB_ACTOR} | sed 's/[][\.*^$(){}?+|/]/\\&/g')
-          REPONAME=$(echo ${GITHUB_REPOSITORY} | cut -d'/' -f2)
-          USERNAME=$(echo ${GITHUB_REPOSITORY} | cut -d'/' -f1)
-          EMAIL="anish.shobith19@gmail.com"
-          SHA=$(git rev-parse --short HEAD)
-          BRANCH=${GITHUB_REF##*/}
-          TARGET_BRANCH="build"
-          REPO="https://${USERNAME}:${GITHUB_TOKEN}@github.com/${USERNAME}/${REPONAME}.git"
 
-          # Clone the existing "build" branch for this repo into build/
-          # Create a new empty branch if gh-pages doesn't exist yet (should only happen on first deploy)
-          git clone $REPO build
-          cd build
-          git checkout $TARGET_BRANCH || git checkout --orphan $TARGET_BRANCH
-          cd ..
+          GITHUB_ACTOR=${{ github.actor }}
+          GITHUB_REPO=${{ github.repository }}
+          GITHUB_SHA=${{ github.sha }}
+          GITHUB_REF=${{ github.ref }}
+          GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}
+          GITHUB_EMAIL="anish.shobith19@gmail.com"
+          BUILD_BRANCH="build"
 
-          # Clean out existing contents
-          rm -rf build/**/* || exit 0
+          # Checkout the repo to the previous commit
+          git checkout ${GITHUB_SHA}^1
 
+          # Create a new branch that will contain only the build files
+          git checkout -b ${BUILD_BRANCH}
 
-          # Run our compile script
-          yarn build
+          # Delete all files except the build files
+          find . -not -path "./dist/*" -not -name ".git" -delete
 
-          # Now let's go have some fun with the cloned repo
-          cd build
-          git config user.name "${GITHUB_ACTOR}"
-          git config user.email "${EMAIL}"
+          # Move the build files to the root directory
+          mv dist/* . && rm -rf dist
 
-          # If there are no changes to the compiled build (e.g. this is a README update) then just bail.
-          if [ -z "$(git status --porcelain)" ]; then
-            echo "No changes to the output on this push; exiting."
-            exit 0
-          fi
+          # Push the new branch
+          git config --global user.email ${GITHUB_EMAIL}
+          git config --global user.name ${GITHUB_ACTOR}
+          git add -fA
+          git commit --allow-empty -m "Build ${GITHUB_SHA}"
 
-          # Commit the "changes", i.e. the new version.
-          # The delta will show diffs between new and old versions.
-          git add .
-          git commit -m "Deploy to Build: ${SHA}"
+          # Force push to the build branch
+          git push -f origin ${BUILD_BRANCH}
 
-          # Now that we're all set up, we can push.
-          git push $REPO $TARGET_BRANCH
+          # Go back to the original branch
+          git checkout ${GITHUB_REF}
+
+          echo "Published to build branch!"
+
+          
 
