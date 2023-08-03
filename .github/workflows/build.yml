@@ -64,11 +64,18 @@ jobs:
 
           echo -e "\n# Checkout the repository on the target branch"
           TARGET_BRANCH="build"
-          git clone $REPO out -b $TARGET_BRANCH
+          git clone $REPO out
 
+          # Check if the target branch exists locally
+          if ! git show-ref --quiet refs/heads/$TARGET_BRANCH; then
+            # If the target branch doesn't exist, create and switch to it
+            cd out
+            git checkout -b $TARGET_BRANCH
+            cd ..
+          fi
 
           echo -e "\n# Remove any old files in the dist folder"
-          rm -rfv out/dist/*
+          rm -rfv out/**/*
 
           echo -e "\n# Move the generated docs to the newly-checked-out repo, to be committed and pushed"
           rsync -vaI package.json out/
