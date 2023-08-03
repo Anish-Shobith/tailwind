@@ -95,6 +95,7 @@ jobs:
         uses: JS-DevTools/npm-publish@v2
         with:
           token: ${{ secrets.NPM_AUTH_TOKEN }}
+          access: public
           
 
 
