@@ -73,12 +73,12 @@ jobs:
             git checkout -b $TARGET_BRANCH
             git rm -rf .
             cd ..
+          else
+            # If the target branch exists, just switch to it
+            cd out
+            git checkout $TARGET_BRANCH
+            cd ..
           fi
-
-          echo -e "\n# Pull changes from the remote build branch using merge"
-          cd out
-          git pull origin $TARGET_BRANCH --no-rebase
-          cd ..
 
           echo -e "\n# Check if there are changes to be published"
           if [[ -z $(git diff --name-only) ]]; then
