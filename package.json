@@ -6,6 +6,17 @@
   "files": [
     "dist/*"
   ],
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Anish-Shobith/tailwindcss.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Anish-Shobith/tailwindcss/issues"
+  },
+  "homepage": "https://github.com/Anish-Shobith/tailwindcss#readme",
   "scripts": {
     "build": "tsc"
   },
