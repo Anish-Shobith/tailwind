@@ -79,7 +79,7 @@ jobs:
 
           echo -e "\n# Commit and push"
           cd out
-          git add .
+          git add -f out/
           git config user.name "${GITHUB_ACTOR}"
           git config user.email "${GITHUB_EMAIL}"
           git commit -m "build: tsc build for ${GITHUB_SHA}" || true
