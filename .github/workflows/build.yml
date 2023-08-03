@@ -58,7 +58,6 @@ jobs:
           GITHUB_REPOSITORY=${{ github.repository }}
           GITHUB_SHA=${{ github.sha }}
           GITHUB_REF=${{ github.ref }}
-          GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}
           GITHUB_EMAIL="anish.shobith19@gmail.com"
 
           REPO="https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
@@ -84,3 +83,5 @@ jobs:
           git config user.email "${GITHUB_EMAIL}"
           git commit -m "build: tsc build for ${GITHUB_SHA}" || true
           git push origin $TARGET_BRANCH
+        env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
