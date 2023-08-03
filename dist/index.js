@@ -6,3 +6,4 @@ export const anishPreset = {
     content: [],
     plugins: [animatePlugin, anishPlugin],
 };
+//# sourceMappingURL=index.js.map
