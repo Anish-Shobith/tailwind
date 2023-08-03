@@ -91,3 +91,6 @@ jobs:
       
         env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            YARN_ENABLE_GLOBAL_CACHE: 'false'
+            YARN_NM_MODE: 'hardlinks-local'
+            YARN_INSTALL_STATE_PATH: .yarn/ci-cache/install-state.gz
