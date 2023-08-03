@@ -12,6 +12,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@anishshobith/tailwind@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "@anishshobith/tailwind@workspace:."
+  dependencies:
+    tailwindcss: ^3.3.3
+    tailwindcss-animate: ^1.0.6
+  languageName: unknown
+  linkType: soft
+
 "@isaacs/cliui@npm:^8.0.2":
   version: 8.0.2
   resolution: "@isaacs/cliui@npm:8.0.2"
@@ -161,15 +170,6 @@ __metadata:
   checksum: 1101a33f21baa27a2fa8e04b698271e64616b886795fd43c31068c07533c7b3facfcaf4e9e0cab3624bd88f729a592f1c901a1a229c9e490eafce411a8644b79
   languageName: node
   linkType: hard
-
-"anishshobith-tailwind@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "anishshobith-tailwind@workspace:."
-  dependencies:
-    tailwindcss: ^3.3.3
-    tailwindcss-animate: ^1.0.6
-  languageName: unknown
-  linkType: soft
 
 "ansi-regex@npm:^5.0.1":
   version: 5.0.1
