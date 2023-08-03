@@ -8,6 +8,11 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    
+    permissions:
+      contents: read
+      packages: write # allow GITHUB_TOKEN to publish packages
+
     steps:
 
       - name: Checkout Project
@@ -17,7 +22,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18
-          registry-url: https://registry.yarnpkg.com/
+          registry-url: https://registry.npmjs.org/
       
       - name: Expose yarn config as "$GITHUB_OUTPUT"
         id: yarn-config
@@ -72,16 +77,9 @@ jobs:
 
           echo -e "\n# Move the generated docs to the newly-checked-out repo, to be committed and pushed"
           rsync -vaI package.json out/
-          rsync -vaI yarn.lock out/
-          rsync -vaI .yarnrc.yml out/
-          rsync -vaI .yarn/ out/.yarn/
           rsync -vaI README.md out/
           rsync -vaI LICENSE out/
           rsync -vaI dist/ out/dist/
-
-          echo -e "\n# Publish package to Github Package Registry"
-          cd out
-          yarn publish --access public --non-interactive --no-git-tag-version --new-version $GITHUB_SHA --registry https://npm.pkg.github.com
 
           echo -e "\n# Commit and push"
           cd out
@@ -90,9 +88,12 @@ jobs:
           git config user.email "${GITHUB_EMAIL}"
           git commit -m "build: tsc build for ${GITHUB_SHA}" || true
           git push origin $TARGET_BRANCH
-      
+
+      - name: Publish to Github Registry
+        uses: JS-DevTools/npm-publish@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          registry: "https://npm.pkg.github.com"
+
         env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-            YARN_ENABLE_GLOBAL_CACHE: 'false'
-            YARN_NM_MODE: 'hardlinks-local'
-            YARN_INSTALL_STATE_PATH: .yarn/ci-cache/install-state.gz
