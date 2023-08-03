@@ -1,5 +1,5 @@
 {
-  "name": "@anishshobith/tailwind",
+  "name": "anishshobith-tailwind",
   "packageManager": "yarn@3.6.1",
   "version": "1.2.0",
   "main": "dist/index.js",
