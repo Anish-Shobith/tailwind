@@ -54,13 +54,12 @@ jobs:
           set -e
 
           echo -e "\n# Initialize some useful variables"
-          GITHUB_ACTOR={{ github.actor }}
-          GITHUB_REPOSITORY={{ github.repository }}
-          GITHUB_SHA={{ github.sha }}
-          GITHUB_REF={{ github.ref }}
-          GITHUB_TOKEN={{ secrets.GITHUB_TOKEN }}
-          GITHUB_BRANCH={{ github.branch }} # The branch this action is running on
-          GITHUB_EMAIL={{ github.actor }}@users.noreply.github.com
+          GITHUB_ACTOR=${{ github.actor }}
+          GITHUB_REPOSITORY=${{ github.repository }}
+          GITHUB_SHA=${{ github.sha }}
+          GITHUB_REF=${{ github.ref }}
+          GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}
+          GITHUB_EMAIL=${{ github.actor }}@users.noreply.github.com
 
           REPO="https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
 
