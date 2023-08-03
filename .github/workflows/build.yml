@@ -75,9 +75,9 @@ jobs:
             cd ..
           fi
 
-          echo -e "\n# Pull changes from the remote build branch"
+          echo -e "\n# Pull changes from the remote build branch using merge"
           cd out
-          git pull origin $TARGET_BRANCH
+          git pull origin $TARGET_BRANCH --no-rebase
           cd ..
 
           echo -e "\n# Check if there are changes to be published"
