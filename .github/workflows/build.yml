@@ -65,7 +65,7 @@ jobs:
 
           echo -e "\n# Checkout the repository on the target branch"
           TARGET_BRANCH="build"
-          git clone $REPO --branch $TARGET_BRANCH
+          git clone $REPO data -b $TARGET_BRANCH
 
 
           echo -e "\n# Remove any old files in the dist folder"
