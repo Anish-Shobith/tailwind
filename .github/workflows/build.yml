@@ -64,22 +64,8 @@ jobs:
 
           echo -e "\n# Checkout the repository on the target branch"
           TARGET_BRANCH="build"
-          git clone $REPO out
-
-          # Check if the target branch exists locally
-          if ! git show-ref --quiet refs/heads/$TARGET_BRANCH; then
-            # If the target branch doesn't exist, create and switch to it
-            cd out
-            git checkout -b $TARGET_BRANCH
-            git rm -rf .
-            cd ..
-          else
-            # If the target branch exists, just switch to it
-            cd out
-            git checkout $TARGET_BRANCH
-            cd ..
-          fi
-
+          git clone $REPO out -b $TARGET_BRANCH
+          
           echo -e "\n# Remove any old files in the dist folder"
           rm -rfv out/dist/*
 
