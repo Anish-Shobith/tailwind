@@ -75,16 +75,16 @@ jobs:
           fi
 
           echo -e "\n# Remove any old files in the dist folder"
-          rm -rfv out/**/*
+          rm -rfv out/dist/*
 
-          # echo -e "\n# Move the generated docs to the newly-checked-out repo, to be committed and pushed"
-          # rsync -vaI package.json out/
-          # rsync -vaI README.md out/
-          # rsync -vaI LICENSE out/
-          # rsync -vaI dist/ out/dist
+          echo -e "\n# Move the generated docs to the newly-checked-out repo, to be committed and pushed"
+          rsync -vaI package.json out/
+          rsync -vaI README.md out/
+          rsync -vaI LICENSE out/
+          rsync -vaI dist/ out/dist
 
-          # echo -e "\n# Commit and push"
-          # cd out
+          echo -e "\n# Commit and push"
+          cd out
           git add --all .
           git config user.name "${GITHUB_ACTOR}"
           git config user.email "${GITHUB_EMAIL}"
