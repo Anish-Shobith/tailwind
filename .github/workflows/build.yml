@@ -44,7 +44,7 @@ jobs:
           SHA=$(git rev-parse --short HEAD)
           BRANCH=${GITHUB_REF##*/}
           TARGET_BRANCH="build"
-          REPO="https://${USERNAME}:${GITHUB_TOKEN}@github.com/${REPONAME}.git"
+          REPO="https://${USERNAME}:${GITHUB_TOKEN}@github.com/${USERNAME}/${REPONAME}.git"
 
           # Clone the existing "build" branch for this repo into build/
           # Create a new empty branch if gh-pages doesn't exist yet (should only happen on first deploy)
