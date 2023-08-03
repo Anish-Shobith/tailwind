@@ -78,7 +78,7 @@ jobs:
           rsync -vaI dist/ data/dist
 
           echo -e "\n# Commit and push"
-          cd out
+          cd data
           git add --all .
           git config user.name "${GITHUB_ACTOR}"
           git config user.email "${GITHUB_EMAIL}"
